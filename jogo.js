@@ -45,7 +45,7 @@ const Floor = {
     altura: 112,
     x: 0,
     y: canvas.height - 112,
-    
+
     desenha() {
         contexto.drawImage(
             sprites,
@@ -54,7 +54,7 @@ const Floor = {
             Floor.x, Floor.y, // Posição X, Posição Y no canvas
             Floor.largura, Floor.altura // Tamanho do recorte no canvas
         );
-           contexto.drawImage(
+        contexto.drawImage(
             sprites,
             Floor.Sx, Floor.Sy, // Sprite X, Sprite Y
             Floor.largura, Floor.altura, // Tamanho do recorte na sprite
@@ -69,11 +69,11 @@ const flapBird = {
     Sy: 0,
     largura: 33,
     altura: 24,
-    x: 50,
+    x: 20,
     y: 50,
     speed: 0,
     gravity: 0.25,
-    atualizar(){
+    atualizar() {
         flapBird.speed = flapBird.speed + flapBird.gravity;
         flapBird.y = flapBird.y + flapBird.speed;
     },
@@ -92,16 +92,66 @@ const flapBird = {
     }
 };
 
+const mensagemGetReady = {
+    Sx: 134,
+    Sy: 0,
+    largura: 174,
+    altura: 152,
+    x: (canvas.width / 2) - 174 / 2,
+    y: 50,
+
+    desenha() {
+        contexto.drawImage(
+            sprites,
+            mensagemGetReady.Sx, mensagemGetReady.Sy, // Sprite X, Sprite Y
+            mensagemGetReady.largura, mensagemGetReady.altura, // Tamanho do recorte na sprite
+            mensagemGetReady.x, mensagemGetReady.y, // Posição X, Posição Y no canvas
+            mensagemGetReady.largura, mensagemGetReady.altura // Tamanho do recorte no canvas
+        );
+    }
+};
+
+let telaActive = {};
+function changeScreen(newscreen) {
+    telaActive = newscreen;
+};
+
+const Tela = {
+    INICIO: {
+        desenha() {
+            Background.desenha();
+            Floor.desenha();
+            flapBird.desenha();
+            mensagemGetReady.desenha();
+        },
+        click() {
+            changeScreen(Tela.JOGO);
+        },
+        atualizar() {
+        }
+    }
+};
+Tela.JOGO = {
+    desenha() {
+        Background.desenha();
+        Floor.desenha();
+        flapBird.desenha();
+    },
+    atualizar() {
+        flapBird.atualizar();
+    }
+}
 function loop() {
-    flapBird.atualizar();
-
-    Background.desenha();
-    Floor.desenha();
-    flapBird.desenha();
-
-        
+    telaActive.desenha();
+    telaActive.atualizar();
 
     requestAnimationFrame(loop);
 }
 
+window.addEventListener("click", function () {
+    if (telaActive == Tela.INICIO) {
+        changeScreen(Tela.JOGO);
+    }
+});
+changeScreen(Tela.INICIO);
 loop();
