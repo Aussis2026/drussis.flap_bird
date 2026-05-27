@@ -71,6 +71,10 @@ const flapBird = {
     altura: 24,
     x: 20,
     y: 50,
+    pulo: 4.6,
+    jump(){
+        flapBird.speed = - flapBird.pulo;
+    },
     speed: 0,
     gravity: 0.25,
     atualizar() {
@@ -137,6 +141,9 @@ Tela.JOGO = {
         Floor.desenha();
         flapBird.desenha();
     },
+    click() {
+        flapBird.jump();
+    },
     atualizar() {
         flapBird.atualizar();
     }
@@ -149,8 +156,8 @@ function loop() {
 }
 
 window.addEventListener("click", function () {
-    if (telaActive == Tela.INICIO) {
-        changeScreen(Tela.JOGO);
+    if (telaActive.click) {
+        telaActive.click();
     }
 });
 changeScreen(Tela.INICIO);
